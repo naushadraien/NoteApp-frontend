@@ -1,0 +1,24 @@
+import { UserType } from "@/types";
+import { Button } from "./ui/button";
+import { Edit } from "lucide-react";
+import { useRouter } from "next/navigation";
+
+const Profile = ({ data }: { data: UserType }) => {
+  const router = useRouter();
+  const handleUpdate = () => {
+    router.push(`/profile/edit`);
+  };
+  return (
+    <div className="flex justify-center items-center flex-col">
+      <div className="flex gap-x-1 w-4 justify-center items-center">
+        <p className="font-bold text-xl">{data.name}</p>
+        <Button onClick={handleUpdate} className="bg-transparent text-red-500 ">
+          <Edit />
+        </Button>
+      </div>
+      <p>{data.email}</p>
+    </div>
+  );
+};
+
+export default Profile;

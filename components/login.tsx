@@ -9,13 +9,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { addUser } from "@/lib/redux/slices/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { z } from "zod";
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -31,13 +33,36 @@ const Login = () => {
       password: "",
     },
   });
-  const queryClient = useQueryClient();
+  const dispatch = useDispatch();
   const mutation = useMutation({
-    mutationFn: (values) => {
-      return axios.post("http://localhost:5000/api/v1/auth/login", values);
+    mutationFn: async (values) => {
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/auth/login`,
+          values,
+          {
+            withCredentials: true,
+          }
+        );
+        // if (res.status === 200) {
+        //   toast.success(`Welcome ${res.data.name}`);
+        //   router.push("/");
+        //   router.refresh();
+        // }
+        // console.log(res.data);
+        return res.data;
+      } catch (error: any) {
+        toast.error(error.response.data.message);
+        // console.log(error.response.data.message);
+      }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+    onSuccess: (data) => {
+      // console.log(data);
+      toast.success(`Welcome ${data.name}`);
+      dispatch(addUser(data));
+      router.push("/");
+
+      // queryClient.invalidateQueries({ queryKey: ["user"] });
     },
   });
 
@@ -47,11 +72,6 @@ const Login = () => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     mutation.mutate(values as any);
-    console.log(mutation?.data?.data.name);
-    if (mutation.data?.status === 200) {
-      toast.success(`Welcome ${mutation?.data?.data.name}`);
-      router.push("/");
-    }
   }
   return (
     <div className="flex justify-center items-center flex-col">

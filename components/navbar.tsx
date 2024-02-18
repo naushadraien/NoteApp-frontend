@@ -3,10 +3,14 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store/store";
+import Logout from "./logout";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
-  const user = true;
   const [toggleNav, setToggleNav] = useState(false);
+  const { isAuth } = useSelector((state: RootState) => state.user);
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900 dark:border-gray-700">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
@@ -31,8 +35,7 @@ const Navbar = () => {
           aria-controls="navbar-dropdown"
           aria-expanded="false"
           onClick={() => {
-            setToggleNav(!toggleNav);
-            console.log(toggleNav);
+            setToggleNav((prev) => !prev);
           }}
         >
           <span className="sr-only">Open main menu</span>
@@ -77,12 +80,26 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Link
-                href="/login"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                {!user ? "Login" : "Logout"}
-              </Link>
+              {isAuth && (
+                <Link
+                  href={`/profile`}
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Profile
+                </Link>
+              )}
+            </li>
+            <li>
+              {isAuth ? (
+                <Logout />
+              ) : (
+                <Link
+                  href="/login"
+                  className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
+                >
+                  Login
+                </Link>
+              )}
             </li>
           </ul>
         </div>

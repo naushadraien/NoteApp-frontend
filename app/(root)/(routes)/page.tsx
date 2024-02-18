@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/button";
+import HomePage from "@/components/Home";
 
 export default function Home() {
   return (
-    <main className="flex justify-center items-center">Hello {`user`}</main>
+    <main className="flex justify-center items-center">
+      <HomePage />
+    </main>
   );
 }
