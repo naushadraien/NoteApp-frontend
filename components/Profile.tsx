@@ -1,13 +1,15 @@
 import { UserType } from "@/types";
-import { Button } from "./ui/button";
-import { Edit } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Button } from "./ui/button";
 
 const Profile = ({ data }: { data: UserType }) => {
   const router = useRouter();
   const handleUpdate = () => {
     router.push(`/profile/edit`);
   };
+
+  const handleDelete = () => {};
   return (
     <div className="flex justify-center items-center flex-col">
       <div className="flex gap-x-1 w-4 justify-center items-center">

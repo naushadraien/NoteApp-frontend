@@ -9,13 +9,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { addUser } from "@/lib/redux/slices/userSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -26,21 +28,31 @@ const formSchema = z.object({
   }),
 });
 const SignUp = () => {
-  // Access the client
-  const queryClient = useQueryClient();
   const router = useRouter();
-
+  const dispatch = useDispatch();
   // Mutations
   const mutation = useMutation({
     mutationFn: async (values) => {
-      // await new Promise((resolve) =>
-      //   setTimeout(() => resolve(console.log("Resolving")), 2000)
-      // );
-      return axios.post("http://localhost:5000/api/v1/auth/new", values);
-    },
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/api/v1/auth/new",
+          values,
+          {
+            withCredentials: true,
+          }
+        );
+        console.log(res);
+
+        if (res.status === 201) {
+          dispatch(addUser(res.data));
+          toast.success("Registered Successfully!");
+          router.push("/");
+          return res.data;
+        }
+      } catch (error: any) {
+        router.push("/login");
+        toast.error(error.response.data.message);
+      }
     },
   });
 
@@ -55,17 +67,8 @@ const SignUp = () => {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate(values as any);
-    if (mutation.data === undefined) {
-      toast.error("Retry!");
-    }
-    if (mutation.data?.status === 201) {
-      router.push("/");
-      toast.success("Registered Successfully!");
-    }
-    if (mutation.data?.status === 200) {
-      router.push("/");
-      toast.success(mutation.data?.data.message);
-    }
+    // dispatch(CreateUser(values));
+    // router.push("/");
   }
   return (
     <div className="flex justify-center items-center flex-col">

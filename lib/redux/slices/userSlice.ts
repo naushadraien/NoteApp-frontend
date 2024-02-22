@@ -1,17 +1,47 @@
+// import { UserType1 } from "@/components/signup";
 import { UserType } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 interface dataType {
   data: null | UserType;
   isAuth: boolean;
+  user: UserType[];
+  isLoading: boolean;
+  isError: boolean;
 }
 
 const initialState: dataType = {
   data: null,
   isAuth: false,
+  user: [],
+  isLoading: false,
+  isError: false,
 };
 
+// //for creating the posts
+// export const CreateUser = createAsyncThunk(
+//   "CreateUser",
+//   async (values: UserType1, { rejectWithValue }) => {
+//     //this data argument is passed from the dispatch function where this function is called
+//     const response = await axios.post(
+//       "http://localhost:5000/api/v1/auth/new",
+//       values,
+//       {
+//         withCredentials: true,
+//       }
+//     );
+//     try {
+//       // console.log(response.data);
+
+//       return await response.data;
+//     } catch (error: any) {
+//       console.log(error);
+
+//       return rejectWithValue(error.response);
+//     }
+//   }
+// );
 export const userSlice = createSlice({
   name: "user",
   initialState,
@@ -26,7 +56,29 @@ export const userSlice = createSlice({
     logoutUser: (state: dataType) => {
       state.isAuth = false;
     },
+    deleteUser: (state: dataType) => {
+      state.data = null;
+      state.isAuth = false;
+    },
   },
+  // extraReducers: (builder) => {
+  //   //for creating posts
+  //   builder.addCase(CreateUser.pending, (state, action) => {
+  //     state.isLoading = true;
+  //   });
+  //   builder.addCase(CreateUser.fulfilled, (state, action) => {
+  //     state.isLoading = false;
+  //     state.user.push(action.payload);
+  //     state.data = action.payload;
+  //     state.isAuth = true;
+  //     toast.success("Registered SuccessFully!");
+  //     console.log("builder", action.payload);
+  //   });
+  //   builder.addCase(CreateUser.rejected, (state, action) => {
+  //     state.isError = true;
+  //     console.log("error", state.isError);
+  //   });
+  // },
 });
 
 // Action creators are generated for each case reducer function

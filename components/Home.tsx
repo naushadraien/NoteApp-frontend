@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const router = useRouter();
-  const { data, isAuth } = useSelector((state: RootState) => state.user);
-  console.log(data);
+  // const { data, isAuth, user } = useSelector((state: RootState) => state.user);
+  const { data, isAuth, } = useSelector((state: RootState) => state.user);
+  // console.log(user);
 
   useEffect(() => {
     if (!isAuth) {
