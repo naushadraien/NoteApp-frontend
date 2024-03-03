@@ -1,28 +1,32 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "../slices/userSlice";
-import storage from "redux-persist/lib/storage";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
   PURGE,
   REGISTER,
+  REHYDRATE,
+  persistReducer,
+  persistStore,
 } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import noteReducer from "../slices/noteSlice";
+import userReducer from "../slices/userSlice";
 
 const persistConfig = {
   key: "root",
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer); // here root reducer is passed as an argument to persistReducer
+const rootReducer = combineReducers({
+  user: userReducer,
+  note: noteReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, rootReducer); // here root reducer is passed as an argument to persistReducer
 
 export const store = configureStore({
-  reducer: {
-    user: persistedReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

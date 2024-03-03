@@ -1,17 +1,17 @@
 // import { UserType1 } from "@/components/signup";
-import { UserType } from "@/types";
+import { userType } from "@/types";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-interface dataType {
-  data: null | UserType;
+interface initialStateType {
+  data: null | userType;
   isAuth: boolean;
-  user: UserType[];
+  user: userType[];
   isLoading: boolean;
   isError: boolean;
 }
 
-const initialState: dataType = {
+const initialState: initialStateType = {
   data: null,
   isAuth: false,
   user: [],
@@ -46,17 +46,17 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    addUser: (state: dataType, action: PayloadAction<UserType>) => {
+    addUser: (state: initialStateType, action: PayloadAction<userType>) => {
       state.data = action.payload;
       state.isAuth = true;
     },
-    updateUser: (state: dataType, action: PayloadAction<UserType>) => {
+    updateUser: (state: initialStateType, action: PayloadAction<userType>) => {
       state.data = action.payload;
     },
-    logoutUser: (state: dataType) => {
+    logoutUser: (state: initialStateType) => {
       state.isAuth = false;
     },
-    deleteUser: (state: dataType) => {
+    deleteUser: (state: initialStateType) => {
       state.data = null;
       state.isAuth = false;
     },
