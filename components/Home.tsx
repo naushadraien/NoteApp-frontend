@@ -36,6 +36,8 @@ const HomePage = () => {
       queryFn: async ({ pageParam = 1 }) => {
         // Destructure pageParam with default 1
         try {
+          // Simulate a delay of 1 second
+          await new Promise((resolve) => setTimeout(resolve, 1000));
           const { data } = await axios.get(
             `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/notes/user/all?page=${pageParam}`,
             {
@@ -69,8 +71,6 @@ const HomePage = () => {
       fetchNextPage();
     }
   }, [fetchNextPage, inView]);
-
-  console.log(data);
 
   return (
     <div>
