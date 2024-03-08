@@ -78,6 +78,25 @@ const Test = () => {
 
     pages.push(i);
   }
+
+  // const songsArray = [1, 2, 3, 5];
+
+  // const foundKey = songsArray.find((key, idx) => songsArray.length === idx + 1); //this finds the last key in the array
+  // console.log("found Key", foundKey);
+
+  // console.log("isArray", Array.isArray(songsArray)); //this checks the songsArray is array or not if it is then it will return true
+
+  // console.log(songsArray.length);
+  // const kongo = songsArray.map((song, idx) => {
+  //   //these both checks the last index of the array and returns true
+  //   console.log("last songs index", idx === songsArray.length - 1); //this checks the last index of the array and returns true
+  //   console.log("last songs index2", songsArray.length === idx + 1); // this checks the last index of the array and returns true
+
+  //   return <div key={idx}>{song}</div>;
+  // });
+
+  // console.log("kongo", kongo);
+
   return (
     <div>
       <AddNewNote />

@@ -1,5 +1,6 @@
 "use client";
 
+import BreadCrumb from "@/components/BreadCrumb";
 import Profile from "@/components/Profile";
 import { RootState } from "@/lib/redux/store/store";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +18,13 @@ const SingleProfile = () => {
       router.push("/login");
     }
   }, [isAuth, router]);
-  return <>{data && <Profile data={data} />}</>;
+  const breadCrumbs = [{ label: "Profile", path: "/profile" }];
+  return (
+    <>
+      <BreadCrumb breadCrumbs={breadCrumbs} />
+      {data && <Profile data={data} />}
+    </>
+  );
 };
 
 export default SingleProfile;

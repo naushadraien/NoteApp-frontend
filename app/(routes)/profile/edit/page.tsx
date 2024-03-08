@@ -1,5 +1,6 @@
 "use client";
 
+import BreadCrumb from "@/components/BreadCrumb";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -79,40 +80,48 @@ const EditUser = () => {
     // ✅ This will be type-safe and validated.
     mutation.mutate(values as any);
   }
+  const breadCrumbs = [
+    { label: "Profile", path: "/profile" },
+    { label: "Profile Edit", path: "/profile/edit" },
+  ];
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button disabled={mutation.isPending} type="submit">
-          {mutation.isPending ? "Updating" : "Update"}
-        </Button>
-      </form>
-    </Form>
+    <>
+      <BreadCrumb breadCrumbs={breadCrumbs} />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button disabled={mutation.isPending} type="submit">
+            {mutation.isPending ? "Updating" : "Update"}
+          </Button>
+        </form>
+      </Form>
+    </>
   );
 };
 
