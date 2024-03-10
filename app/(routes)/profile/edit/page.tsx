@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/form";
 import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
+import UploadThingImg from "@/components/ui/upload-thing-img-upload";
 import { updateUser } from "@/lib/redux/slices/userSlice";
 import { RootState } from "@/lib/redux/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -111,6 +112,24 @@ const EditUser = () => {
               </FormItem>
             )}
           />
+          {/* <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Profile Image</FormLabel>
+                <FormControl>
+                  <UploadThingImg
+                    value={field.value ? [field.value] : []}
+                    disabled={mutation.isPending}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
           <FormField
             control={form.control}
             name="name"
