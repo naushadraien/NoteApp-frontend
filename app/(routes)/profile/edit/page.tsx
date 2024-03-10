@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import ImageUpload from "@/components/ui/image-upload";
 import { Input } from "@/components/ui/input";
 import { updateUser } from "@/lib/redux/slices/userSlice";
 import { RootState } from "@/lib/redux/store/store";
@@ -27,6 +28,7 @@ import { z } from "zod";
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   email: z.string().max(40),
+  imageUrl: z.string().min(1),
 });
 
 const EditUser = () => {
@@ -46,6 +48,7 @@ const EditUser = () => {
     defaultValues: data || {
       name: "",
       email: "",
+      imageUrl: "",
     },
   });
   const queryClient = useQueryClient();
@@ -60,7 +63,7 @@ const EditUser = () => {
             withCredentials: true,
           }
         );
-        console.log(res.data);
+        // console.log(res.data);
         return res.data;
       } catch (error: any) {
         console.log(error);
@@ -90,6 +93,24 @@ const EditUser = () => {
       <BreadCrumb breadCrumbs={breadCrumbs} />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="imageUrl"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Background Image</FormLabel>
+                <FormControl>
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    disabled={mutation.isPending}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="name"
