@@ -3,6 +3,7 @@ export interface userType {
   name: string;
   email: string;
   role: string;
+  imageUrl: string;
   notes?: noteType[];
   createdAt: Date;
   updatedAt: Date;
