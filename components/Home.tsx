@@ -9,14 +9,23 @@ import {
 } from "@/components/ui/card";
 import { RootState } from "@/lib/redux/store/store";
 import { noteType } from "@/types";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import AddNewNote from "./AddNote";
 import { Button } from "./ui/button";
 import { useInView } from "react-intersection-observer";
+import { Edit, Trash } from "lucide-react";
+import Link from "next/link";
+import { addNotes } from "@/lib/redux/slices/noteSlice";
+import toast from "react-hot-toast";
+import { Search } from "./Search";
 
 // ... (import statements)
 
@@ -29,6 +38,8 @@ const HomePage = () => {
       router.push("/login");
     }
   }, [isAuth, router]);
+
+  const dispatch = useDispatch();
 
   const { data, fetchNextPage, hasNextPage, isLoading, isFetchingNextPage } =
     useInfiniteQuery({
@@ -44,6 +55,7 @@ const HomePage = () => {
               withCredentials: true,
             }
           );
+          dispatch(addNotes(data.totalNotes));
           return data.notes as noteType[];
         } catch (error) {
           console.log(error);
@@ -61,6 +73,28 @@ const HomePage = () => {
   //     fetchNextPage();
   //   }
   // };
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: async (id) => {
+      try {
+        const res = await axios.delete(
+          `${process.env.NEXT_PUBLIC_BACKEND_BASE_URL}/notes/${id}`,
+          {
+            withCredentials: true,
+          }
+        );
+        return res.data;
+      } catch (error: any) {
+        console.log(error);
+        toast.error(error.message);
+      }
+    },
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries({ queryKey: ["noteData"] });
+    },
+  });
 
   const { ref, inView } = useInView({
     /* Optional options */
@@ -101,7 +135,12 @@ const flattenedWithFlat = pages.flat().map((note) => note.text);
                 <CardHeader>
                   <CardTitle className="flex justify-between">
                     <div>{note.title}</div>
-                    <div>icons come here</div>
+                    <Link href={`/notes/${note._id}`}>
+                      <Edit />
+                    </Link>
+                    <Button onClick={() => mutation.mutate(note._id)}>
+                      <Trash />
+                    </Button>
                   </CardTitle>
                   <CardDescription>{note.description}</CardDescription>
                 </CardHeader>

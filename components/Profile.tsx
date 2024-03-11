@@ -1,9 +1,9 @@
-import { UserType } from "@/types";
-import { Edit, Trash } from "lucide-react";
+import { userType } from "@/types";
+import { Edit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-const Profile = ({ data }: { data: UserType }) => {
+const Profile = ({ data }: { data: userType }) => {
   const router = useRouter();
   const handleUpdate = () => {
     router.push(`/profile/edit`);
