@@ -14,9 +14,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import AddNewNote from "./AddNote";
 import { Button } from "./ui/button";
-
 // ... (import statements)
 
 const Notes = () => {
@@ -92,7 +90,6 @@ const Notes = () => {
   };
   return (
     <div>
-      <AddNewNote />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 overflow-hidden px-5">
         {data?.notes?.map(
           (note: noteType) =>
